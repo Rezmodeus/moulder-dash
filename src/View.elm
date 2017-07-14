@@ -13,6 +13,7 @@ import Material.Dialog as Dialog
 import Material.Button as Button
 import Material.Options as Options exposing (css, cs, when)
 import Route exposing (Route(..))
+import View.Quest
 import View.Home
 import View.Users
 import Charts
@@ -54,7 +55,6 @@ view model =
             , main =
                 [ viewBody model
                 , Snackbar.view model.snackbar |> Html.map Snackbar
-                , viewSource model
                 , helpDialog model
                 ]
                     ++ Charts.createDefinitions
@@ -74,27 +74,6 @@ viewHeader model =
         ]
 
 
-viewSource : Model -> Html Msg
-viewSource model =
-    Button.render Mdl
-        [ 5, 6, 6, 7 ]
-        model.mdl
-        [ css "position" "fixed"
-        , css "display" "block"
-        , css "left" "100"
-        , css "bottom" "0"
-        , css "margin-left" "80px"
-        , css "margin-bottom" "40px"
-        , css "z-index" "900"
-        , Color.text Color.white
-        , Button.ripple
-        , Button.colored
-        , Button.raised
-        , Options.onClick (ViewSourceClick "https://github.com/vipentti/elm-mdl-dashboard")
-        ]
-        [ text "View Source" ]
-
-
 type alias MenuItem =
     { text : String
     , iconName : String
@@ -104,7 +83,7 @@ type alias MenuItem =
 
 menuItems : List MenuItem
 menuItems =
-    [ { text = "Quests", iconName = "build", route = Just Home }
+    [ { text = "Quests", iconName = "build", route = Just Quest }
     , { text = "Dashboard", iconName = "dashboard", route = Just Home }
     , { text = "Users", iconName = "group", route = Just Users }
     , { text = "Last Activity", iconName = "alarm", route = Nothing }
@@ -228,6 +207,9 @@ viewBody model =
 
         Just (Route.Users) ->
             View.Users.view model
+
+        Just (Route.Quest) ->
+            View.Quest.view model
 
         Nothing ->
             text "404"
