@@ -15,3 +15,4 @@ type Msg
     | Toggle (List Int)
     | SelectMail String
     | ViewSourceClick String
+    | TestMsg String

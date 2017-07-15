@@ -27,7 +27,7 @@ init : Maybe Route -> List (Maybe Route)
 init location =
     case location of
         Nothing ->
-            [ Just Home ]
+            [ Just Quest ]
 
         something ->
             [ something ]

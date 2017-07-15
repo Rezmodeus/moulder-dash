@@ -18,6 +18,13 @@ update msg model =
         Mdl msg_ ->
             Material.update Mdl msg_ model
 
+        TestMsg str ->
+            let
+                a =
+                    (Debug.log "kek" str)
+            in
+                model ! []
+
         Snackbar msg_ ->
             let
                 ( snackbar, snackCmd ) =
