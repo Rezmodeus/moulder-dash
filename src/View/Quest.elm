@@ -1,5 +1,6 @@
 module View.Quest exposing (view)
 
+import Data.Quest exposing (Dialog(..), SpeechData, Choice)
 import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Html exposing (Html, text, div, span)
@@ -15,15 +16,30 @@ white =
     Color.text Color.white
 
 
-view : Model -> Html Msg
-view model =
+testSpeech : Dialog
+testSpeech =
+    Speech
+        (SpeechData "QuestReceiver"
+            "Can you help me find XX"
+            [ Choice "yes" "key1"
+            , Choice "no" "key2"
+            ]
+        )
+
+
+
+-- card for speech
+
+
+speechCard : Model -> SpeechData -> Html Msg
+speechCard model speechData =
     Card.view
         [ Color.background (Color.color Color.DeepOrange Color.S400)
         , css "width" "192px"
         , css "height" "192px"
         ]
-        [ Card.title [] [ Card.head [ white ] [ text "Roskilde Festival" ] ]
-        , Card.text [ white ] [ text "Buy tickets before May" ]
+        [ Card.title [] [ Card.head [ white ] [ text speechData.speaker ] ]
+        , Card.text [ white ] [ text speechData.text ]
         , Card.actions
             [ Card.border, css "vertical-align" "center", css "text-align" "right", white ]
             [ Button.render Mdl
@@ -38,3 +54,38 @@ view model =
                 [ Icon.i "event_available" ]
             ]
         ]
+
+
+view : Model -> Html Msg
+view model =
+    case testSpeech of
+        Speech data ->
+            -- TODO: remove hardcoded
+            speechCard model data
+
+        _ ->
+            text "no no"
+
+
+
+-- Card.view
+--     [ Color.background (Color.color Color.DeepOrange Color.S400)
+--     , css "width" "192px"
+--     , css "height" "192px"
+--     ]
+--     [ Card.title [] [ Card.head [ white ] [ text "Roskilde Festival" ] ]
+--     , Card.text [ white ] [ text "Buy tickets before May" ]
+--     , Card.actions
+--         [ Card.border, css "vertical-align" "center", css "text-align" "right", white ]
+--         [ Button.render Mdl
+--             [ 8, 1 ]
+--             model.mdl
+--             [ Button.icon, Button.ripple ]
+--             [ Icon.i "favorite_border" ]
+--         , Button.render Mdl
+--             [ 8, 2 ]
+--             model.mdl
+--             [ Button.icon, Button.ripple, Options.onClick (TestMsg "clickety") ]
+--             [ Icon.i "event_available" ]
+--         ]
+--     ]
