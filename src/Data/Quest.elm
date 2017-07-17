@@ -26,6 +26,15 @@ type alias Conversation =
     List ( String, Dialog )
 
 
+type alias QuestState =
+    { str : String }
+
+
+initQuestState : QuestState
+initQuestState =
+    QuestState "aa"
+
+
 
 -- standard move to next speech
 

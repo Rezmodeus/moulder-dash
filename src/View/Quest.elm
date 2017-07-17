@@ -1,6 +1,6 @@
 module View.Quest exposing (view)
 
-import Data.Quest exposing (Dialog(..), SpeechData, Choice)
+import Data.Quest exposing (Dialog(..), SpeechData, Choice, QuestState)
 import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Html exposing (Html, text, div, span)
@@ -45,7 +45,8 @@ speechCard model speechData =
             [ Button.render Mdl
                 [ 8, 1 ]
                 model.mdl
-                [ Button.icon, Button.ripple ]
+                -- TODO handle messages locally for quests
+                [ Button.icon, Button.ripple, Options.onClick (update "hej") ]
                 [ Icon.i "favorite_border" ]
             , Button.render Mdl
                 [ 8, 2 ]
@@ -54,6 +55,15 @@ speechCard model speechData =
                 [ Icon.i "event_available" ]
             ]
         ]
+
+
+
+-- TODO handle messages locally for quests
+
+
+update : String -> Msg
+update msg =
+    QuestMsg (QuestState msg)
 
 
 view : Model -> Html Msg

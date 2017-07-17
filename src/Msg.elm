@@ -4,6 +4,7 @@ import Material
 import Material.Snackbar as Snackbar
 import Navigation
 import Types exposing (User)
+import Data.Quest exposing (QuestState)
 
 
 type Msg
@@ -16,3 +17,4 @@ type Msg
     | SelectMail String
     | ViewSourceClick String
     | TestMsg String
+    | QuestMsg QuestState

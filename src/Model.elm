@@ -7,6 +7,7 @@ import Route exposing (Route)
 import Types exposing (User)
 import Dict exposing (Dict)
 import Navigation
+import Data.Quest exposing (QuestState, initQuestState)
 
 
 type alias Model =
@@ -16,6 +17,7 @@ type alias Model =
     , users : List User
     , toggles : Dict (List Int) Bool
     , selectedMail : String
+    , questState : QuestState
     }
 
 
@@ -27,6 +29,7 @@ initialModel location =
     , users = mockUsers
     , toggles = Dict.empty
     , selectedMail = "elm.mdl@example.0"
+    , questState = initQuestState
     }
 
 

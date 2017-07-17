@@ -18,6 +18,9 @@ update msg model =
         Mdl msg_ ->
             Material.update Mdl msg_ model
 
+        QuestMsg qState ->
+            { model | questState = Debug.log "update questState" qState } ! []
+
         TestMsg str ->
             let
                 a =
