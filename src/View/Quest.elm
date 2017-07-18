@@ -1,6 +1,6 @@
 module View.Quest exposing (view)
 
-import Data.Quest exposing (Dialog(..), SpeechData, Choice, QuestState)
+import Data.Quest exposing (Dialog(..), Quest, Conversation, SpeechData, Choice, QuestState)
 import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Html exposing (Html, text, div, span)
@@ -33,37 +33,98 @@ testSpeech =
 
 speechCard : Model -> SpeechData -> Html Msg
 speechCard model speechData =
-    Card.view
-        [ Color.background (Color.color Color.DeepOrange Color.S400)
-        , css "width" "192px"
-        , css "height" "192px"
-        ]
-        [ Card.title [] [ Card.head [ white ] [ text speechData.speaker ] ]
-        , Card.text [ white ] [ text speechData.text ]
-        , Card.actions
-            [ Card.border, css "vertical-align" "center", css "text-align" "right", white ]
-            [ Button.render Mdl
-                [ 8, 1 ]
-                model.mdl
-                -- TODO handle messages locally for quests
-                [ Button.icon, Button.ripple, Options.onClick (update "hej") ]
-                [ Icon.i "favorite_border" ]
-            , Button.render Mdl
-                [ 8, 2 ]
-                model.mdl
-                [ Button.icon, Button.ripple, Options.onClick (TestMsg "clickety") ]
-                [ Icon.i "event_available" ]
+    let
+        q =
+            model.questState
+    in
+        Card.view
+            [ Color.background (Color.color Color.DeepOrange Color.S400)
+            , css "width" "492px"
+            , css "height" "192px"
             ]
-        ]
+            [ Card.title [] [ Card.head [ white ] [ text speechData.speaker ] ]
+            , Card.text [ white ] [ text speechData.text ]
+            , Card.actions
+                [ Card.border, css "vertical-align" "center", css "text-align" "right", white ]
+                [ Button.render Mdl
+                    [ 8, 1 ]
+                    model.mdl
+                    -- TODO handle messages locally for quests
+                    [ Button.icon, Button.ripple, Options.onClick (update q 1) ]
+                    [ Icon.i "favorite_border" ]
+                , Button.render Mdl
+                    [ 8, 2 ]
+                    model.mdl
+                    [ Button.icon, Button.ripple, Options.onClick (TestMsg "clickety") ]
+                    [ Icon.i "event_available" ]
+                ]
+            ]
 
 
 
--- TODO handle messages locally for quests
+-- local quest handlers
+-- TODO add selection var to this function
 
 
-update : String -> Msg
-update msg =
-    QuestMsg (QuestState msg)
+selectedConversation : Maybe Data.Quest.Quest -> Maybe Conversation
+selectedConversation q =
+    case q of
+        Nothing ->
+            Nothing
+
+        Just quest_ ->
+            Just quest_.prolog
+
+
+dialogAt : Int -> Maybe Conversation -> Maybe ( String, Dialog )
+dialogAt pos conv =
+    case conv of
+        Nothing ->
+            Nothing
+
+        Just conv_ ->
+            (List.head conv_)
+
+
+addChoice : QuestState -> Msg
+addChoice qState =
+    QuestMsg <|
+        let
+            diag =
+                selectedConversation qState.quest
+                    |> dialogAt 0
+
+            peka =
+                Debug.log "diag" diag
+        in
+            case diag of
+                Nothing ->
+                    qState
+
+                Just diag_ ->
+                    qState
+
+
+
+--
+-- addChoice : QuestState -> Msg
+-- addChoice qState =
+--     QuestMsg <|
+--         let
+--             q =
+--               if qState.quest == Nothing then
+--                 QuestState Nothing 0
+--             else
+--                 qState
+--
+--             newChoice =
+--                 Choice "empty" "noKey"
+--         in
+
+
+update : QuestState -> Int -> Msg
+update qState questPos =
+    QuestMsg { qState | questPos = questPos }
 
 
 view : Model -> Html Msg

@@ -20,19 +20,35 @@ type alias SpeechData =
 type Dialog
     = Speech SpeechData
     | DoEvents (List Event)
+    | Test Int
 
 
 type alias Conversation =
     List ( String, Dialog )
 
 
+type alias Quest =
+    { prolog : Conversation
+    , active : Conversation
+    , success : Conversation
+    , failure : Conversation
+    , rewardActions : List Int
+    }
+
+
+
+-- Editor data
+
+
 type alias QuestState =
-    { str : String }
+    { quest : Maybe Quest
+    , questPos : Int
+    }
 
 
 initQuestState : QuestState
 initQuestState =
-    QuestState "aa"
+    QuestState Nothing 0
 
 
 
