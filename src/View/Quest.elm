@@ -1,6 +1,8 @@
 module View.Quest exposing (view)
 
-import Data.Quest exposing (Dialog(..), Quest, Conversation, SpeechData, Choice, QuestState)
+-- import Data.Quest exposing (Dialog(..), Quest, Conversation, SpeechData, Choice, QuestState)
+
+import Data.Quest exposing (QuestState)
 import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Html exposing (Html, text, div, span)
@@ -16,22 +18,20 @@ white =
     Color.text Color.white
 
 
-testSpeech : Dialog
-testSpeech =
-    Speech
-        (SpeechData "QuestReceiver"
-            "Can you help me find XX"
-            [ Choice "yes" "key1"
-            , Choice "no" "key2"
-            ]
-        )
 
-
-
+-- testSpeech : Dialog
+-- testSpeech =
+--     Speech
+--         (SpeechData "QuestReceiver"
+--             "Can you help me find XX"
+--             [ Choice "yes" "key1"
+--             , Choice "no" "key2"
+--             ]
+--         )
 -- card for speech
 
 
-speechCard : Model -> SpeechData -> Html Msg
+speechCard : Model -> String -> Html Msg
 speechCard model speechData =
     let
         q =
@@ -42,8 +42,8 @@ speechCard model speechData =
             , css "width" "492px"
             , css "height" "192px"
             ]
-            [ Card.title [] [ Card.head [ white ] [ text speechData.speaker ] ]
-            , Card.text [ white ] [ text speechData.text ]
+            [ Card.title [] [ Card.head [ white ] [ text "speechData.speaker" ] ]
+            , Card.text [ white ] [ text "speechData.text" ]
             , Card.actions
                 [ Card.border, css "vertical-align" "center", css "text-align" "right", white ]
                 [ Button.render Mdl
@@ -64,48 +64,43 @@ speechCard model speechData =
 
 -- local quest handlers
 -- TODO add selection var to this function
-
-
-selectedConversation : Maybe Data.Quest.Quest -> Maybe Conversation
-selectedConversation q =
-    case q of
-        Nothing ->
-            Nothing
-
-        Just quest_ ->
-            Just quest_.prolog
-
-
-dialogAt : Int -> Maybe Conversation -> Maybe ( String, Dialog )
-dialogAt pos conv =
-    case conv of
-        Nothing ->
-            Nothing
-
-        Just conv_ ->
-            (List.head conv_)
-
-
-addChoice : QuestState -> Msg
-addChoice qState =
-    QuestMsg <|
-        let
-            diag =
-                selectedConversation qState.quest
-                    |> dialogAt 0
-
-            peka =
-                Debug.log "diag" diag
-        in
-            case diag of
-                Nothing ->
-                    qState
-
-                Just diag_ ->
-                    qState
-
-
-
+-- selectedConversation : Maybe Data.Quest.Quest -> Maybe Conversation
+-- selectedConversation q =
+--     case q of
+--         Nothing ->
+--             Nothing
+--
+--         Just quest_ ->
+--             Just quest_.prolog
+--
+--
+-- dialogAt : Int -> Maybe Conversation -> Maybe ( String, Dialog )
+-- dialogAt pos conv =
+--     case conv of
+--         Nothing ->
+--             Nothing
+--
+--         Just conv_ ->
+--             (List.head conv_)
+--
+--
+-- addChoice : QuestState -> Msg
+-- addChoice qState =
+--     QuestMsg <|
+--         let
+--             diag =
+--                 selectedConversation qState.quest
+--                     |> dialogAt 0
+--
+--             peka =
+--                 Debug.log "diag" diag
+--         in
+--             case diag of
+--                 Nothing ->
+--                     qState
+--
+--                 Just diag_ ->
+--                     qState
 --
 -- addChoice : QuestState -> Msg
 -- addChoice qState =
@@ -123,19 +118,13 @@ addChoice qState =
 
 
 update : QuestState -> Int -> Msg
-update qState questPos =
-    QuestMsg { qState | questPos = questPos }
+update qState someInt =
+    QuestMsg qState
 
 
 view : Model -> Html Msg
 view model =
-    case testSpeech of
-        Speech data ->
-            -- TODO: remove hardcoded
-            speechCard model data
-
-        _ ->
-            text "no no"
+    speechCard model "ehj"
 
 
 
