@@ -1,6 +1,6 @@
 module View.Quest exposing (view)
 
-import Data.Quest exposing (QuestState)
+import Data.Quest exposing (QuestState, SpeechText)
 import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Html exposing (Html, text, div, span)
@@ -9,6 +9,7 @@ import Material.Button as Button
 import Material.Color as Color
 import Material.Card as Card
 import Material.Options as Options exposing (css, cs, when, onClick)
+import Dict exposing (..)
 
 
 white : Options.Property c m
@@ -16,8 +17,43 @@ white =
     Color.text Color.white
 
 
-speechCard : Model -> String -> Html Msg
-speechCard model speechData =
+speechCard : Model -> SpeechText -> Html Msg
+speechCard model speechText =
+    Card.view
+        [ Color.background (Color.color Color.DeepOrange Color.S400)
+        , css "width" "292px"
+        , css "height" "192px"
+        ]
+        [ Card.title [] [ Card.head [ white ] [ text "SpeechText" ] ]
+        , Card.text [ white ] [ text speechText ]
+        , Card.actions
+            [ Card.border, css "vertical-align" "center", css "text-align" "right", white ]
+            [ Button.render Mdl
+                [ 8, 1 ]
+                model.mdl
+                [ Button.icon, Button.ripple, Options.onClick (TestMsg "clickety") ]
+                [ Icon.i "favorite_border" ]
+            , Button.render Mdl
+                [ 8, 2 ]
+                model.mdl
+                [ Button.icon, Button.ripple, Options.onClick (TestMsg "clickety") ]
+                [ Icon.i "event_available" ]
+            ]
+        ]
+
+
+speechCards : Model -> List (Html Msg)
+speechCards model =
+    let
+        texts =
+            model.questState.speechTexts
+    in
+        Dict.values texts
+            |> List.map (speechCard model)
+
+
+testCard : Model -> String -> Html Msg
+testCard model speechData =
     let
         q =
             model.questState
@@ -57,4 +93,5 @@ update qState someInt =
 
 view : Model -> Html Msg
 view model =
-    speechCard model "ehj"
+    div []
+        (speechCards model)

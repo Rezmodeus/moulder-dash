@@ -110,12 +110,18 @@ type VerbType
 -- data for view
 
 
+initSpeechTexts : Dict.Dict String SpeechText
+initSpeechTexts =
+    Dict.fromList [ ( "a", "text 1" ), ( "b", "text 2" ), ( "c", "text 3" ) ]
+
+
 type alias QuestState =
     { quests : Quests
+    , speechTexts : SpeechTexts
     , questKey : QuestKey
     }
 
 
 initQuestState : QuestState
 initQuestState =
-    QuestState Dict.empty ""
+    QuestState Dict.empty initSpeechTexts ""
