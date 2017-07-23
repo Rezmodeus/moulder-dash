@@ -18,3 +18,5 @@ type Msg
     | ViewSourceClick String
     | TestMsg String
     | QuestMsg QuestState
+    | SpeechTextField String
+    | AddSpeechText QuestState

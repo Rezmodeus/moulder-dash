@@ -119,9 +119,10 @@ type alias QuestState =
     { quests : Quests
     , speechTexts : SpeechTexts
     , questKey : QuestKey
+    , keyNr : Int
     }
 
 
 initQuestState : QuestState
 initQuestState =
-    QuestState Dict.empty initSpeechTexts ""
+    QuestState Dict.empty initSpeechTexts "" 0

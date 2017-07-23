@@ -17,6 +17,7 @@ type alias Model =
     , users : List User
     , toggles : Dict (List Int) Bool
     , selectedMail : String
+    , speechTextField : String
     , questState : QuestState
     }
 
@@ -29,6 +30,7 @@ initialModel location =
     , users = mockUsers
     , toggles = Dict.empty
     , selectedMail = "elm.mdl@example.0"
+    , speechTextField = "nada"
     , questState = initQuestState
     }
 

@@ -8,7 +8,8 @@ import Material.Icon as Icon
 import Material.Button as Button
 import Material.Color as Color
 import Material.Card as Card
-import Material.Options as Options exposing (css, cs, when, onClick)
+import Material.Options as Options exposing (css, cs, when, onClick, onInput)
+import Material.Textfield as Textfield
 import Dict exposing (..)
 
 
@@ -82,8 +83,54 @@ testCard model speechData =
             ]
 
 
+textField : Model -> String -> Html Msg
+textField model label =
+    Textfield.render Mdl
+        [ 2 ]
+        model.mdl
+        [ Textfield.label label
+        , Textfield.floatingLabel
+        , Textfield.text_
+        , Textfield.value model.speechTextField
+        , Options.onInput SpeechTextField
+        ]
+        []
+
+
+addButton : Model -> Html Msg
+addButton model =
+    Button.render Mdl
+        [ 8, 1 ]
+        model.mdl
+        [ Button.icon, Button.ripple, Options.onClick (addSpeechText model) ]
+        [ Icon.i "note_add" ]
+
+
 
 -- local quest handlers
+
+
+getKey : Model -> String
+getKey model =
+    "kek" ++ (toString model.questState.keyNr)
+
+
+addSpeechText : Model -> Msg
+addSpeechText model =
+    let
+        newTexts =
+            Dict.insert (getKey model) model.speechTextField model.questState.speechTexts
+
+        qState =
+            model.questState
+
+        newState =
+            { qState
+                | speechTexts = newTexts
+                , keyNr = model.questState.keyNr + 1
+            }
+    in
+        AddSpeechText newState
 
 
 update : QuestState -> Int -> Msg
@@ -94,4 +141,9 @@ update qState someInt =
 view : Model -> Html Msg
 view model =
     div []
-        (speechCards model)
+        [ div []
+            [ textField model "Speech text"
+            , addButton model
+            ]
+        , div [] (speechCards model)
+        ]

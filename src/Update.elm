@@ -21,6 +21,16 @@ update msg model =
         QuestMsg qState ->
             { model | questState = Debug.log "update questState" qState } ! []
 
+        AddSpeechText qState ->
+            { model
+                | questState = Debug.log "update questState" qState
+                , speechTextField = ""
+            }
+                ! []
+
+        SpeechTextField str ->
+            { model | speechTextField = str } ! []
+
         TestMsg str ->
             let
                 a =
